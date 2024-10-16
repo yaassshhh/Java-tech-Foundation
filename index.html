@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        button {
+            margin: 10px;
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Student Management System</h1>
+
+    <label for="name">Name:</label>
+    <input type="text" id="name" placeholder="Enter Name"><br><br>
+
+    <label for="age">Age:</label>
+    <input type="number" id="age" placeholder="Enter Age"><br><br>
+
+    <label for="grade">Grade:</label>
+    <input type="number" id="grade" placeholder="Enter Grade"><br><br>
+
+    <button id="addBtn" onmouseover="handleMouseOver(event)" onmouseout="handleMouseOut(event)" onclick="addStudent()">Add Student</button>
+    <button id="viewBtn" onmouseover="handleMouseOver(event)" onmouseout="handleMouseOut(event)" onclick="viewStudents()">View Students</button>
+    <button id="sortBtn" onmouseover="handleMouseOver(event)" onmouseout="handleMouseOut(event)" onclick="sortStudents()">Sort by Grade</button>
+    <button id="deleteBtn" onmouseover="handleMouseOver(event)" onmouseout="handleMouseOut(event)" onclick="deleteStudent()">Delete Student</button>
+
+
+    <h2>Student List</h2>
+    <table id="studentTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Grade</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- space for js -->
+        </tbody>
+    </table>
+
+    <script>
+        let students = [];
+
+        function viewStudents() {
+            const tbody = document.getElementById('studentTable').querySelector('tbody');
+            tbody.innerHTML = ''; 
+
+            students.forEach((student, index) => {
+                const row = 
+                `<tr>
+                    <td>${student.name}</td>
+                    <td>${student.age}</td>
+                    <td>${student.grade}</td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function addStudent() {
+            const name = document.getElementById('name').value;
+            const age = document.getElementById('age').value;
+            const grade = document.getElementById('grade').value;
+
+            if (name && age && grade) {
+                students.push({ name, age, grade });
+                alert("Student added successfully!");
+                clearInputs();
+            } else {
+                alert("Please fill all fields.");
+            }
+            viewStudents();
+        }
+
+
+        function sortStudents() {
+            students.sort((a, b) => b.grade - a.grade);
+            viewStudents();
+        }
+
+        function deleteStudent() {
+            const name = prompt("Enter the name of the student to delete:");
+            const index = students.findIndex(student => student.name === name);
+
+            if (index !== -1) {
+                const confirmDelete = confirm(`Are you sure you want to delete ${students[index].name}?`);
+                if (confirmDelete) {
+                    students.splice(index, 1);
+                    alert("Student deleted successfully!");
+                    viewStudents();
+                }
+            } else {
+                alert("Student not found.");
+            }
+        }
+
+        function clearInputs() {
+            document.getElementById('name').value = '';
+            document.getElementById('age').value = '';
+            document.getElementById('grade').value = '';
+        }
+
+        function handleMouseOver(event) {
+            event.target.style.backgroundColor = 'lightgreen';
+        }
+
+        function handleMouseOut(event) {
+            event.target.style.backgroundColor = '';
+        }
+    </script>
+</body>
+</html>
